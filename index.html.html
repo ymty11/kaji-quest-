@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家事クエスト＋</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFF8F0;
+  --card: #FFFFFF;
+  --teal: #2DD4AA;
+  --teal-dark: #1A9E7E;
+  --teal-light: #E0FAF3;
+  --amber: #F59E0B;
+  --amber-light: #FEF3C7;
+  --coral: #FF6B6B;
+  --coral-light: #FFE8E8;
+  --purple: #8B5CF6;
+  --purple-light: #EDE9FE;
+  --text: #2D2A26;
+  --muted: #8A8582;
+  --border: #EDE8E3;
+  --xp-bar: #2DD4AA;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Nunito', 'Zen Maru Gothic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+/* Header */
+.header {
+  background: linear-gradient(135deg, #2DD4AA 0%, #1A9E7E 100%);
+  padding: 1.2rem 1rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: 20px;
+  width: 80px; height: 80px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.app-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -0.5px;
+}
+.level-badge {
+  background: rgba(255,255,255,0.25);
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 20px;
+  padding: 4px 12px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+.xp-section { color: white; }
+.xp-label {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.xp-track {
+  height: 10px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.xp-fill {
+  height: 100%;
+  background: white;
+  border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+/* Stamp bar */
+.stamp-bar {
+  background: white;
+  margin: -1.2rem 1rem 0;
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 10;
+}
+.stamp-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.stamp-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  flex: 1;
+  min-height: 28px;
+  align-items: center;
+}
+.stamp {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  animation: stampPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes stampPop {
+  0%{transform:scale(0) rotate(-20deg);opacity:0}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+.stamp.s0{background:#FEF3C7;} .stamp.s1{background:#FFE8E8;} .stamp.s2{background:#EDE9FE;}
+.stamp.s3{background:#E0FAF3;} .stamp.s4{background:#FEF3C7;} .stamp.s5{background:#FFE8E8;}
+.stamp-empty { font-size: 12px; color: var(--muted); }
+/* Main */
+.main { padding: 1rem; }
+/* AI Card */
+.ai-card {
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+.ai-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ai-icon {
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+.ai-label { font-size: 13px; font-weight: 700; opacity: 0.9; }
+.ai-content { font-size: 14px; line-height: 1.6; min-height: 40px; }
+.ai-btn {
+  margin-top: 10px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 20px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.ai-btn:hover { background: rgba(255,255,255,0.3); }
+.ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+/* Reminder card */
+.reminder-card {
+  background: var(--amber-light);
+  border: 1.5px solid #FDE68A;
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
+}
+.reminder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.reminder-title { font-size: 13px; font-weight: 700; color: #92400E; display: flex; align-items: center; gap: 6px; }
+.reminder-list { display: flex; flex-direction: column; gap: 5px; }
+.reminder-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.reminder-name { color: var(--text); font-weight: 600; }
+.reminder-time { color: var(--amber); font-weight: 700; }
+.reminder-del { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 14px; padding: 0 2px; }
+.add-reminder-row {
+  display: flex; gap: 6px; margin-top: 8px;
+}
+.add-reminder-row input, .add-reminder-row select {
+  padding: 6px 8px;
+  border: 1.5px solid #FDE68A;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  background: white;
+  outline: none;
+  color: var(--text);
+}
+.add-reminder-row input { flex: 1; }
+.add-reminder-btn {
+  background: var(--amber);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+/* Tabs */
+.tabs {
+  display: flex; gap: 6px; margin-bottom: 0.8rem;
+}
+.tab {
+  flex: 1;
+  padding: 8px 0;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: white;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.tab.active {
+  background: var(--teal-light);
+  border-color: var(--teal);
+  color: var(--teal-dark);
+}
+/* Progress */
+.progress-line {
+  font-size: 12px; color: var(--muted);
+  text-align: right; margin-bottom: 6px; font-weight: 600;
+}
+/* Task list */
+.task-list { display: flex; flex-direction: column; gap: 8px; }
+.task-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  transition: all 0.2s;
+}
+.task-card.done {
+  opacity: 0.5;
+  border-color: #E0FAF3;
+  background: var(--teal-light);
+}
+.check-btn {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  color: transparent;
+}
+.check-btn.checked {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+.task-info { flex: 1; min-width: 0; }
+.task-name {
+  font-size: 14px; font-weight: 700;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.task-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.task-xp {
+  font-size: 11px; font-weight: 700;
+  color: var(--teal-dark);
+  background: var(--teal-light);
+  border-radius: 20px;
+  padding: 2px 7px;
+}
+.timer-btn {
+  padding: 5px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  background: white;
+  font-size: 12px; font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Nunito', monospace;
+  white-space: nowrap;
+  min-width: 54px;
+  text-align: center;
+  transition: all 0.15s;
+}
+.timer-btn.running {
+  border-color: var(--coral);
+  color: var(--coral);
+  background: var(--coral-light);
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+/* Add task */
+.add-row {
+  display: flex; gap: 7px; margin-top: 1rem;
+}
+.add-input {
+  flex: 1;
+  padding: 9px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  outline: none;
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+.add-input:focus { border-color: var(--teal); }
+.add-btn {
+  padding: 9px 14px;
+  background: var(--teal);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+/* Achievement toast */
+.toast {
+  position: fixed;
+  top: 20px; left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  background: var(--text);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 999;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+/* Reminder notification */
+.reminder-notif {
+  position: fixed;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--amber);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 999;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+}
+.reminder-notif.show { transform: translateX(-50%) translateY(0); }
+/* Bottom nav */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; border-top: 1.5px solid var(--border);
+  display: flex; z-index: 100;
+}
+.nav-btn {
+  flex: 1; padding: 10px 0 8px;
+  background: none; border: none; font-family: inherit; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--muted); font-size: 10px; font-weight: 700; transition: color 0.15s;
+}
+.nav-btn .nav-icon { font-size: 20px; line-height: 1; }
+.nav-btn.active { color: var(--teal-dark); }
+body { padding-bottom: 68px; }
+.page { display: none; }
+.page.active { display: block; }
+/* Shopping */
+.shop-header { padding: 1.2rem 1rem 0.3rem; }
+.shop-header h2 { font-size: 20px; font-weight: 800; }
+.shop-header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.shop-ai-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(135deg,#667EEA,#764BA2);
+  border: none; border-radius: 10px; color: white;
+  font-size: 13px; font-weight: 700; padding: 8px 14px;
+  cursor: pointer; font-family: inherit; margin: 0.6rem 1rem;
+}
+.shop-ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.shop-sections { padding: 0 1rem; }
+.shop-category {
+  font-size: 11px; font-weight: 800; color: var(--muted);
+  letter-spacing: 1px; margin: 0.9rem 0 5px;
+}
+.shop-item {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 5px;
+}
+.shop-item.bought { opacity: 0.45; background: var(--teal-light); border-color: #9CE8D4; }
+.shop-item.bought .shop-item-name { text-decoration: line-through; }
+.shop-check {
+  width: 24px; height: 24px; border-radius: 6px;
+  border: 2px solid var(--border); background: transparent;
+  cursor: pointer; flex-shrink: 0; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; color: transparent;
+}
+.shop-check.checked { background: var(--teal); border-color: var(--teal); color: white; }
+.shop-item-name { flex: 1; font-size: 14px; font-weight: 600; }
+.shop-item-qty { font-size: 12px; color: var(--muted); background: var(--border); border-radius: 20px; padding: 2px 8px; white-space: nowrap; }
+.shop-item-del { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 13px; padding: 0 3px; }
+.shop-add-row { display: flex; gap: 6px; margin-top: 0.4rem; }
+.shop-add-row input, .shop-add-row select {
+  padding: 9px 10px; border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 13px; font-family: inherit;
+  background: white; outline: none; color: var(--text);
+}
+.shop-add-row input:focus, .shop-add-row select:focus { border-color: var(--teal); }
+.shop-add-row input { flex: 1; }
+.shop-add-row select { width: 75px; }
+.shop-add-btn {
+  padding: 9px 13px; background: var(--teal);
+  border: none; border-radius: 10px; color: white;
+  font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+.shop-clear-btn {
+  display: block; width: calc(100% - 2rem); margin: 0.8rem 1rem 0;
+  padding: 9px; background: var(--coral-light);
+  border: 1.5px solid #FFBABA; border-radius: 10px;
+  color: var(--coral); font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+/* Stock */
+.stock-header { padding: 1.2rem 1rem 0.3rem; }
+.stock-header h2 { font-size: 20px; font-weight: 800; }
+.stock-header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.stock-alert {
+  margin: 0.5rem 1rem;
+  background: var(--coral-light); border: 1.5px solid #FFBABA;
+  border-radius: 12px; padding: 9px 12px;
+  font-size: 13px; font-weight: 600; color: #C0392B; display: none;
+}
+.stock-alert.visible { display: block; }
+.stock-list { padding: 0 1rem; display: flex; flex-direction: column; gap: 7px; margin-top: 0.6rem; }
+.stock-card {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 11px 13px;
+  display: flex; align-items: center; gap: 11px;
+}
+.stock-icon { font-size: 22px; width: 30px; text-align: center; flex-shrink: 0; }
+.stock-info { flex: 1; }
+.stock-name { font-size: 14px; font-weight: 700; }
+.stock-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.stock-dots { display: flex; gap: 3px; margin-top: 5px; }
+.stock-dot { width: 26px; height: 8px; border-radius: 99px; background: var(--border); transition: background 0.2s; }
+.stock-dot.full { background: var(--teal); }
+.stock-dot.warn { background: var(--amber); }
+.stock-dot.danger { background: var(--coral); }
+.stock-controls { display: flex; gap: 5px; }
+.stock-btn {
+  width: 28px; height: 28px; border: 1.5px solid var(--border);
+  border-radius: 8px; background: white; font-size: 15px; font-weight: 700;
+  color: var(--muted); cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+.stock-btn:hover { border-color: var(--teal); color: var(--teal-dark); }
+.stock-level-label { font-size: 11px; font-weight: 700; min-width: 24px; text-align: center; }
+.level-full { color: var(--teal-dark); }
+.level-warn { color: #B45309; }
+.level-danger { color: var(--coral); }
+.stock-add-form {
+  margin: 0.7rem 1rem 0;
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 12px;
+}
+.stock-form-row { display: flex; gap: 6px; margin-bottom: 6px; }
+.stock-add-form input, .stock-add-form select {
+  flex: 1; padding: 8px 10px;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  font-size: 13px; font-family: inherit; background: white;
+  outline: none; color: var(--text);
+}
+.stock-add-form input:focus, .stock-add-form select:focus { border-color: var(--teal); }
+.stock-form-btn {
+  padding: 8px 14px; background: var(--teal);
+  border: none; border-radius: 9px; color: white;
+  font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+</style>
+</head>
+<body>
+
+<div class="page active" id="page-quest">
+<!-- Header -->
+<div class="header">
+  <div class="header-top">
+    <div class="app-title">🏠 家事クエスト</div>
+    <div class="level-badge" id="level-badge">Lv.1 主婦の卵</div>
+  </div>
+  <div class="xp-section">
+    <div class="xp-label">
+      <span id="xp-label-text">経験値</span>
+      <span id="xp-nums">0 / 100 XP</span>
+    </div>
+    <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- Stamp bar -->
+<div class="stamp-bar">
+  <div class="stamp-title">スタンプ</div>
+  <div class="stamp-row" id="stamp-row">
+    <span class="stamp-empty">家事をクリアしてゲット！</span>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- AI提案 -->
+  <div class="ai-card">
+    <div class="ai-header">
+      <div class="ai-icon">✨</div>
+      <div class="ai-label">AIからの今日のアドバイス</div>
+    </div>
+    <div class="ai-content" id="ai-content">ボタンを押すと、今日おすすめの家事を提案します！</div>
+    <button class="ai-btn" id="ai-btn" onclick="fetchAISuggestion()">今日のおすすめを聞く</button>
+  </div>
+
+  <!-- リマインダー -->
+  <div class="reminder-card">
+    <div class="reminder-header">
+      <div class="reminder-title">⏰ リマインダー</div>
+    </div>
+    <div class="reminder-list" id="reminder-list"></div>
+    <div class="add-reminder-row">
+      <input id="reminder-name" placeholder="家事の名前..." />
+      <select id="reminder-time">
+        <option value="9:00">9:00</option>
+        <option value="10:00">10:00</option>
+        <option value="12:00">12:00</option>
+        <option value="14:00">14:00</option>
+        <option value="17:00">17:00</option>
+        <option value="19:00" selected>19:00</option>
+        <option value="20:00">20:00</option>
+        <option value="21:00">21:00</option>
+      </select>
+      <button class="add-reminder-btn" onclick="addReminder()">＋</button>
+    </div>
+  </div>
+
+  <!-- タブ -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('daily',this)">毎日</button>
+    <button class="tab" onclick="switchTab('weekly',this)">週1回</button>
+    <button class="tab" onclick="switchTab('monthly',this)">月1回</button>
+  </div>
+  <div class="progress-line" id="progress"></div>
+  <div class="task-list" id="task-list"></div>
+
+  <div class="add-row">
+    <input class="add-input" id="add-input" placeholder="クエストを追加..." />
+    <button class="add-btn" onclick="addTask()">＋追加</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<div class="reminder-notif" id="reminder-notif"></div>
+
+</div><!-- /page-quest -->
+
+<!-- ===== 買い物ページ ===== -->
+<div class="page" id="page-shop">
+  <div class="shop-header">
+    <h2>🛒 買い物メモ</h2>
+    <p>カテゴリ別に管理。AIが提案もしてくれます</p>
+  </div>
+  <button class="shop-ai-btn" id="shop-ai-btn" onclick="fetchShopSuggestion()">
+    <span>✨</span> ストックをみてAIに買い物提案してもらう
+  </button>
+  <div id="shop-ai-result" style="margin:0 1rem 0.5rem;font-size:13px;color:#5B21B6;font-weight:600;display:none;background:#EDE9FE;border-radius:10px;padding:9px 12px;"></div>
+  <div class="shop-sections" id="shop-sections"></div>
+  <div class="shop-sections">
+    <div class="shop-add-row">
+      <input id="shop-input" placeholder="商品を追加..." />
+      <select id="shop-cat">
+        <option value="野菜・果物">野菜</option>
+        <option value="肉・魚">肉・魚</option>
+        <option value="乳製品">乳製品</option>
+        <option value="調味料">調味料</option>
+        <option value="日用品">日用品</option>
+        <option value="その他">その他</option>
+      </select>
+      <button class="shop-add-btn" onclick="addShopItem()">＋</button>
+    </div>
+  </div>
+  <button class="shop-clear-btn" onclick="clearBought()">✓ 買ったものをクリア</button>
+</div>
+
+<!-- ===== ストックページ ===== -->
+<div class="page" id="page-stock">
+  <div class="stock-header">
+    <h2>📦 ストック管理</h2>
+    <p>残量を3段階で管理。少なくなったら買い物メモへ！</p>
+  </div>
+  <div class="stock-alert" id="stock-alert"></div>
+  <div class="stock-list" id="stock-list"></div>
+  <div class="stock-add-form">
+    <div class="stock-form-row">
+      <input id="stock-name-input" placeholder="アイテム名..." />
+      <select id="stock-icon-select">
+        <option value="🥚">🥚 卵</option>
+        <option value="🥛">🥛 牛乳</option>
+        <option value="🍚">🍚 米</option>
+        <option value="🧅">🧅 玉ねぎ</option>
+        <option value="🧄">🧄 にんにく</option>
+        <option value="🫙">🫙 調味料</option>
+        <option value="🧴">🧴 洗剤</option>
+        <option value="🧻">🧻 トイレットペーパー</option>
+        <option value="📦">📦 その他</option>
+      </select>
+    </div>
+    <button class="stock-form-btn" onclick="addStockItem()" style="width:100%">＋ ストックを追加</button>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-quest" onclick="switchPage('quest')">
+    <span class="nav-icon">🏠</span>家事クエスト
+  </button>
+  <button class="nav-btn" id="nav-shop" onclick="switchPage('shop')">
+    <span class="nav-icon">🛒</span>買い物
+  </button>
+  <button class="nav-btn" id="nav-stock" onclick="switchPage('stock')">
+    <span class="nav-icon">📦</span>ストック
+  </button>
+</nav>
+
+<script>
+const LEVELS = [
+  {min:0, label:'Lv.1 主婦の卵'},
+  {min:100, label:'Lv.2 家事ビギナー'},
+  {min:250, label:'Lv.3 おそうじ戦士'},
+  {min:500, label:'Lv.4 家事マスター'},
+  {min:1000, label:'Lv.5 伝説の主婦'},
+];
+const STAMPS = ['⭐','❤️','🌸','✨','🌟','🍀','🎉','🏆','🌈','💎'];
+
+let xp = 0, stamps = 0;
+let currentTab = 'daily';
+const timers = {};
+
+const data = {
+  daily: [
+    {id:1,name:'洗濯機を回す',min:5,xp:10,done:false,running:false,elapsed:0},
+    {id:2,name:'食器洗い',min:15,xp:15,done:false,running:false,elapsed:0},
+    {id:3,name:'掃除機がけ',min:20,xp:20,done:false,running:false,elapsed:0},
+    {id:4,name:'夕食の準備',min:45,xp:30,done:false,running:false,elapsed:0},
+  ],
+  weekly: [
+    {id:10,name:'お風呂掃除',min:20,xp:25,done:false,running:false,elapsed:0},
+    {id:11,name:'トイレ掃除',min:10,xp:20,done:false,running:false,elapsed:0},
+    {id:12,name:'床の拭き掃除',min:25,xp:25,done:false,running:false,elapsed:0},
+  ],
+  monthly: [
+    {id:20,name:'冷蔵庫の整理',min:30,xp:40,done:false,running:false,elapsed:0},
+    {id:21,name:'窓ふき',min:40,xp:40,done:false,running:false,elapsed:0},
+    {id:22,name:'排水口の掃除',min:15,xp:35,done:false,running:false,elapsed:0},
+  ]
+};
+
+let reminders = [
+  {id:1, name:'洗濯物を干す', time:'10:00'},
+  {id:2, name:'夕食の準備', time:'17:00'},
+];
+
+function getLevelInfo(xp) {
+  for(let i=LEVELS.length-1;i>=0;i--) {
+    if(xp >= LEVELS[i].min) return {label: LEVELS[i].label, idx: i};
+  }
+  return {label: LEVELS[0].label, idx: 0};
+}
+
+function getNextLevelXP(idx) {
+  return idx < LEVELS.length-1 ? LEVELS[idx+1].min : LEVELS[idx].min + 500;
+}
+
+function updateXP() {
+  const {label, idx} = getLevelInfo(xp);
+  const prev = idx > 0 ? LEVELS[idx].min : 0;
+  const next = getNextLevelXP(idx);
+  const pct = Math.min(100, ((xp - prev) / (next - prev)) * 100);
+  document.getElementById('level-badge').textContent = label;
+  document.getElementById('xp-nums').textContent = xp + ' / ' + next + ' XP';
+  document.getElementById('xp-fill').style.width = pct + '%';
+}
+
+function addXP(amount) {
+  const oldLevel = getLevelInfo(xp).idx;
+  xp += amount;
+  const newLevel = getLevelInfo(xp).idx;
+  updateXP();
+  if(newLevel > oldLevel) showToast('🎉 レベルアップ！ ' + getLevelInfo(xp).label);
+}
+
+function updateStamps() {
+  const row = document.getElementById('stamp-row');
+  if(stamps === 0) {
+    row.innerHTML = '<span class="stamp-empty">家事をクリアしてゲット！</span>';
+    return;
+  }
+  row.innerHTML = Array.from({length: Math.min(stamps, 20)}, (_,i) =>
+    `<div class="stamp s${i%6}">${STAMPS[i%STAMPS.length]}</div>`
+  ).join('');
+}
+
+function fmt(sec) {
+  const m = Math.floor(sec/60), s = sec%60;
+  return m + ':' + (s<10?'0':'') + s;
+}
+
+function switchTab(tab, el) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function render() {
+  const tasks = data[currentTab];
+  const done = tasks.filter(t=>t.done).length;
+  document.getElementById('progress').textContent = done + ' / ' + tasks.length + ' クエスト完了';
+  document.getElementById('task-list').innerHTML = tasks.map(t => `
+    <div class="task-card${t.done?' done':''}">
+      <button class="check-btn${t.done?' checked':''}" onclick="toggleDone(${t.id})">${t.done?'✓':''}</button>
+      <div class="task-info">
+        <div class="task-name">${t.name}</div>
+        <div class="task-meta">目安 ${t.min}分</div>
+      </div>
+      <div class="task-xp">+${t.xp}XP</div>
+      <button class="timer-btn${t.running?' running':''}" id="timer-${t.id}" onclick="toggleTimer(${t.id})">
+        ${t.running ? fmt(t.elapsed) : (t.elapsed>0 ? fmt(t.elapsed) : '開始')}
+      </button>
+    </div>
+  `).join('');
+}
+
+function toggleDone(id) {
+  const tasks = data[currentTab];
+  const t = tasks.find(t=>t.id===id);
+  if(!t) return;
+  t.done = !t.done;
+  if(t.done) {
+    if(timers[id]) { clearInterval(timers[id]); delete timers[id]; t.running=false; }
+    stamps++;
+    updateStamps();
+    addXP(t.xp);
+    showToast('✅ クリア！ +' + t.xp + 'XP ゲット！');
+  } else {
+    stamps = Math.max(0, stamps-1);
+    xp = Math.max(0, xp - t.xp);
+    updateStamps();
+    updateXP();
+  }
+  render();
+}
+
+function toggleTimer(id) {
+  const tasks = data[currentTab];
+  const t = tasks.find(t=>t.id===id);
+  if(!t || t.done) return;
+  if(t.running) {
+    clearInterval(timers[id]); delete timers[id]; t.running = false;
+  } else {
+    t.running = true;
+    timers[id] = setInterval(() => {
+      t.elapsed++;
+      const el = document.getElementById('timer-'+id);
+      if(el) el.textContent = fmt(t.elapsed);
+    }, 1000);
+  }
+  render();
+}
+
+function addTask() {
+  const input = document.getElementById('add-input');
+  const name = input.value.trim();
+  if(!name) return;
+  data[currentTab].push({id:Date.now(), name, min:15, xp:15, done:false, running:false, elapsed:0});
+  input.value = '';
+  render();
+}
+
+document.getElementById('add-input').addEventListener('keydown', e => {
+  if(e.key==='Enter') addTask();
+});
+
+// Reminders
+function renderReminders() {
+  const list = document.getElementById('reminder-list');
+  if(reminders.length === 0) {
+    list.innerHTML = '<div style="font-size:12px;color:#92400E;opacity:0.6;padding:4px 0;">リマインダーがありません</div>';
+    return;
+  }
+  list.innerHTML = reminders.map(r => `
+    <div class="reminder-item">
+      <span class="reminder-name">${r.name}</span>
+      <span class="reminder-time">⏰ ${r.time}</span>
+      <button class="reminder-del" onclick="deleteReminder(${r.id})">✕</button>
+    </div>
+  `).join('');
+}
+
+function addReminder() {
+  const name = document.getElementById('reminder-name').value.trim();
+  const time = document.getElementById('reminder-time').value;
+  if(!name) return;
+  reminders.push({id: Date.now(), name, time});
+  document.getElementById('reminder-name').value = '';
+  renderReminders();
+  showReminderNotif('⏰ 「' + name + '」を ' + time + ' にセット！');
+}
+
+function deleteReminder(id) {
+  reminders = reminders.filter(r => r.id !== id);
+  renderReminders();
+}
+
+// Check reminders every minute
+function checkReminders() {
+  const now = new Date();
+  const hm = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  reminders.forEach(r => {
+    if(r.time === hm) showReminderNotif('⏰ 時間です！「' + r.name + '」をやろう！');
+  });
+}
+setInterval(checkReminders, 60000);
+
+// Toast
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+let reminderNotifTimer;
+function showReminderNotif(msg) {
+  const n = document.getElementById('reminder-notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  clearTimeout(reminderNotifTimer);
+  reminderNotifTimer = setTimeout(() => n.classList.remove('show'), 3000);
+}
+
+// AI Suggestion
+async function fetchAISuggestion() {
+  const btn = document.getElementById('ai-btn');
+  const content = document.getElementById('ai-content');
+  btn.disabled = true;
+  btn.textContent = '考え中...';
+  content.textContent = '✨ AIが考えています...';
+
+  const allTasks = [...data.daily, ...data.weekly, ...data.monthly];
+  const doneTasks = allTasks.filter(t=>t.done).map(t=>t.name);
+  const pendingTasks = allTasks.filter(t=>!t.done).map(t=>t.name);
+  const now = new Date();
+  const dayOfWeek = ['日','月','火','水','木','金','土'][now.getDay()];
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 200,
+        messages: [{
+          role: 'user',
+          content: `あなたは明るく励ます家事アドバイザーです。今日は${dayOfWeek}曜日です。
+完了済みの家事: ${doneTasks.length > 0 ? doneTasks.join('、') : 'まだなし'}
+残っている家事: ${pendingTasks.join('、')}
+
+今日のおすすめ家事を1〜2個選んで、ゲーム感覚で楽しめる短いアドバイスをください（2文以内、絵文字あり、明るく）。`
+        }]
+      })
+    });
+    const d = await res.json();
+    const text = d.content?.map(c=>c.text||'').join('') || 'うまく取得できませんでした。';
+    content.textContent = text;
+  } catch(e) {
+    content.textContent = '🌟 今日は洗濯と掃除機がけから始めてみましょう！コツコツこなせばXPがたまりますよ！';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'もう一度聞く';
+}
+
+// Page switching
+function switchPage(page) {
+  ['quest','shop','stock'].forEach(p => {
+    document.getElementById('page-'+p).classList.toggle('active', p===page);
+    document.getElementById('nav-'+p).classList.toggle('active', p===page);
+  });
+  if(page==='shop') renderShop();
+  if(page==='stock') renderStock();
+}
+
+// ===== SHOPPING =====
+let shopItems = [
+  {id:1,name:'牛乳',cat:'乳製品',bought:false},
+  {id:2,name:'卵',cat:'乳製品',bought:false},
+  {id:3,name:'玉ねぎ',cat:'野菜・果物',bought:false},
+  {id:4,name:'鶏むね肉',cat:'肉・魚',bought:false},
+  {id:5,name:'醤油',cat:'調味料',bought:true},
+];
+const CATS = ['野菜・果物','肉・魚','乳製品','調味料','日用品','その他'];
+
+function renderShop() {
+  const pending = shopItems.filter(i=>!i.bought);
+  const bought = shopItems.filter(i=>i.bought);
+  const grouped = {};
+  CATS.forEach(c => {
+    const items = shopItems.filter(i=>i.cat===c);
+    if(items.length) grouped[c] = items;
+  });
+  let html = '';
+  Object.entries(grouped).forEach(([cat, items]) => {
+    html += `<div class="shop-category">${cat}</div>`;
+    items.forEach(item => {
+      html += `
+        <div class="shop-item${item.bought?' bought':''}">
+          <button class="shop-check${item.bought?' checked':''}" onclick="toggleShop(${item.id})">${item.bought?'✓':''}</button>
+          <span class="shop-item-name">${item.name}</span>
+          <button class="shop-item-del" onclick="deleteShopItem(${item.id})">✕</button>
+        </div>`;
+    });
+  });
+  document.getElementById('shop-sections').innerHTML = html;
+  const btn = document.querySelector('.shop-clear-btn');
+  if(btn) btn.style.display = bought.length ? 'block' : 'none';
+}
+
+function toggleShop(id) {
+  const item = shopItems.find(i=>i.id===id);
+  if(item) { item.bought = !item.bought; renderShop(); }
+}
+function deleteShopItem(id) {
+  shopItems = shopItems.filter(i=>i.id!==id); renderShop();
+}
+function addShopItem() {
+  const name = document.getElementById('shop-input').value.trim();
+  const cat = document.getElementById('shop-cat').value;
+  if(!name) return;
+  shopItems.push({id:Date.now(),name,cat,bought:false});
+  document.getElementById('shop-input').value = '';
+  renderShop();
+}
+function clearBought() {
+  shopItems = shopItems.filter(i=>!i.bought); renderShop();
+}
+document.addEventListener('keydown', e => {
+  if(e.key==='Enter' && document.activeElement.id==='shop-input') addShopItem();
+});
+
+async function fetchShopSuggestion() {
+  const btn = document.getElementById('shop-ai-btn');
+  const result = document.getElementById('shop-ai-result');
+  btn.disabled = true; btn.textContent = '考え中...';
+  result.style.display = 'block';
+  result.textContent = '✨ ストックを確認して提案中...';
+  const low = stockItems.filter(s=>s.level<=1).map(s=>s.name);
+  const shopList = shopItems.filter(i=>!i.bought).map(i=>i.name);
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:150,
+        messages:[{role:'user',content:`主婦向け買い物アドバイスAIです。
+在庫が少ないもの: ${low.length?low.join('、'):'なし'}
+現在の買い物リスト: ${shopList.length?shopList.join('、'):'なし'}
+追加で買うべきものを2〜3個、短く明るく提案してください（絵文字あり、1〜2文）。`}]
+      })
+    });
+    const d = await res.json();
+    result.textContent = d.content?.map(c=>c.text||'').join('')||'提案を取得できませんでした。';
+  } catch(e) {
+    result.textContent = '🛒 牛乳と卵は切れやすいので多めに！調味料のストックも確認してみてください。';
+  }
+  btn.disabled = false; btn.innerHTML = '<span>✨</span> もう一度提案してもらう';
+}
+
+// ===== STOCK =====
+let stockItems = [
+  {id:1,name:'卵',icon:'🥚',level:3,unit:'パック'},
+  {id:2,name:'牛乳',icon:'🥛',level:1,unit:'本'},
+  {id:3,name:'お米',icon:'🍚',level:2,unit:'袋'},
+  {id:4,name:'醤油',icon:'🫙',level:3,unit:'本'},
+  {id:5,name:'トイレットペーパー',icon:'🧻',level:1,unit:'パック'},
+  {id:6,name:'洗剤',icon:'🧴',level:2,unit:'本'},
+];
+const LEVEL_LABELS = ['なし','少ない','ふつう','たくさん'];
+
+function renderStock() {
+  const lowItems = stockItems.filter(s=>s.level===0);
+  const warnItems = stockItems.filter(s=>s.level===1);
+  const alert = document.getElementById('stock-alert');
+  const msgs = [];
+  if(lowItems.length) msgs.push('⚠️ 在庫なし: ' + lowItems.map(s=>s.name).join('・'));
+  if(warnItems.length) msgs.push('🔔 残り少ない: ' + warnItems.map(s=>s.name).join('・'));
+  if(msgs.length) { alert.innerHTML = msgs.join('<br>'); alert.classList.add('visible'); }
+  else alert.classList.remove('visible');
+
+  document.getElementById('stock-list').innerHTML = stockItems.map(s => {
+    const dots = [1,2,3].map(n => {
+      let cls = '';
+      if(s.level >= n) cls = s.level===1?'warn':s.level===2?'full':'full';
+      if(s.level===0) cls = '';
+      return `<div class="stock-dot ${cls}"></div>`;
+    }).join('');
+    const labelCls = s.level===0?'level-danger':s.level===1?'level-warn':'level-full';
+    return `
+      <div class="stock-card">
+        <div class="stock-icon">${s.icon}</div>
+        <div class="stock-info">
+          <div class="stock-name">${s.name}</div>
+          <div class="stock-dots">${dots}</div>
+        </div>
+        <div class="stock-controls">
+          <button class="stock-btn" onclick="changeStock(${s.id},-1)">−</button>
+          <span class="stock-level-label ${labelCls}">${LEVEL_LABELS[s.level]}</span>
+          <button class="stock-btn" onclick="changeStock(${s.id},1)">＋</button>
+        </div>
+        <button class="shop-item-del" style="margin-left:4px" onclick="deleteStock(${s.id})">✕</button>
+      </div>`;
+  }).join('');
+}
+
+function changeStock(id, delta) {
+  const s = stockItems.find(s=>s.id===id);
+  if(!s) return;
+  s.level = Math.max(0, Math.min(3, s.level + delta));
+  renderStock();
+  if(s.level <= 1) showToast('🔔 「'+s.name+'」のストックが少なくなっています');
+}
+function deleteStock(id) {
+  stockItems = stockItems.filter(s=>s.id!==id); renderStock();
+}
+function addStockItem() {
+  const name = document.getElementById('stock-name-input').value.trim();
+  const icon = document.getElementById('stock-icon-select').value.split(' ')[0];
+  if(!name) return;
+  stockItems.push({id:Date.now(),name,icon,level:3,unit:'個'});
+  document.getElementById('stock-name-input').value = '';
+  renderStock();
+}
+
+// Init
+updateXP();
+updateStamps();
+renderReminders();
+render();
+</script>
+</body>
+</html>
